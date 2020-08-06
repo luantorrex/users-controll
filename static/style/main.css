@@ -1,0 +1,8 @@
+.navbar{
+    margin-bottom: 30px;
+}
+
+.ml-auto .dropdown-menu {
+    left: auto !important;
+    right: 0px;
+}

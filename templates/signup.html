@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}SignUp Page{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 30px;">Create an Account</h1>
+
+<form method="POST">
+<label for="fullname">Full Name</label>
+<input name="fullname" id="fullname" class="form-control" placeholder="e.g.: Liam William James">
+<p id="passwordHelpBlock" class="form-text text-muted">
+</p>
+
+<label for="email">E-mail</label>
+<input name="email" id="email" type="email" class="form-control" placeholder="your@email.com">
+<p id="passwordHelpBlock" class="form-text text-muted">
+</p>
+
+<label for="password">Password</label>
+<input name="password" id="password" type="password" class="form-control" placeholder="*****************">
+<p id="passwordHelpBlock" class="form-text text-muted">
+</p>
+
+<button type="submit" value="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 40px;">Sign Up</button>
+</form>
+
+{% endblock %}
