@@ -2,24 +2,34 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
-<h1 style="margin-bottom: 30px;">Welcome to Users Controll</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msgs in messages %}
+                <div class="alert alert-info" role="alert">
+                    {{msgs}}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
-<label for="inputPassword5">E-mail</label>
-<input type="email" id="email" class="form-control" placeholder="your@email.com">
-<p id="passwordHelpBlock" class="form-text text-muted">
-</p>
+    <h1 style="margin-bottom: 30px;">Welcome to Users Controll</h1>
 
-<label for="inputPassword5">Password</label>
-<input type="password" id="inputPassword5" class="form-control" placeholder="*****************">
-<p id="passwordHelpBlock" class="form-text text-muted">
-</p>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" class="form-control" placeholder="your@email.com">
+    <p id="passwordHelpBlock" class="form-text text-muted">
+    </p>
 
-<button type="button" class="btn btn-primary btn-lg btn-block" style="margin-top: 40px;">Login</button>
+    <label for="inputPassword5">Password:</label>
+    <input type="password" id="inputPassword5" class="form-control" placeholder="*****************">
+    <p id="passwordHelpBlock" class="form-text text-muted">
+    </p>
 
-<center>
-    <div class="centralized">
-        <h5 style="padding-top: 30px;">Doen't have an account yet?</h5>
-        <a href="{{ url_for("signup") }}">Sign Up</a>
-    </div>
-</center>
+    <button type="button" class="btn btn-primary btn-lg btn-block" style="margin-top: 40px;">Login</button>
+
+    <center>
+        <div>
+            <h5 style="padding-top: 30px;">Doen't have an account yet?</h5>
+            <a href="{{ url_for("signup") }}">Sign Up</a>
+        </div>
+    </center>
 {% endblock %}

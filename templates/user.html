@@ -2,13 +2,27 @@
 {% block title %}User Page{% endblock %}
 
 {% block content %}
-<h1 style="margin-bottom: 30px;">{{ session["fullname"] }}</h1>
-<h5>E-mail: {{ session["email"] }}</h5>
-<a href="{{ url_for("changeemail") }}">Change E-mail</a>
-<h5 style="margin-top: 15px;">Password: ************</h5>
-<a href="{{ url_for("changepassword") }}">Change Password</a>
-<br>
-<a href="#" style="position:absolute;
-bottom:0;
-height:60px;">Are you an administrator?</a>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msgs in messages %}
+                <div class="alert alert-info" role="alert">
+                    {{msgs}}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h1 style="margin-bottom: 30px;">{{ session["fullname"] }}</h1>
+
+    <h5>E-mail: {{ session["email"] }}</h5>
+    <a href="{{ url_for("changeemail") }}">Change E-mail</a>
+
+    <h5 style="margin-top: 15px;">Password: ************</h5>
+    <a href="{{ url_for("changepassword") }}">Change Password</a>
+
+    <br>
+
+    <a href="#" style="position:absolute;
+    bottom:0;
+    height:60px;">Are you an administrator?</a>
 {% endblock %}
