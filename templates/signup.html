@@ -2,6 +2,17 @@
 {% block title %}SignUp Page{% endblock %}
 
 {% block content %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msgs in messages %}
+                <div class="alert alert-info" role="alert">
+                    {{msgs}}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
 <h1>Create an Account</h1>
 <p><em>All fields are required</em></p>
 

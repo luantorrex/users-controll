@@ -26,7 +26,7 @@ class users(db.Model):
 
 @app.route('/')
 def home():
-    if "fullname" in session:
+    if session.permanent is True:
         return redirect(url_for("user"))
     return render_template("home.html")
 
@@ -34,17 +34,22 @@ def home():
 @app.route('/signup/', methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        session.permanent = True
         session["fullname"] = request.form["fullname"]
         session["email"] = request.form["email"]
         session["password"] = request.form["password"]
-        user = users(
-            session["fullname"],
-            session["email"],
-            session["password"])
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for("user"))
+        exists = db.session.query(users._id).filter_by(
+            email=session["email"]).scalar() is not None
+
+        if exists:
+            flash("Esse e-mail já está sendo utilizado.")
+            return redirect(url_for("signup"))
+        else:
+            session.permanent = True
+            user = users(
+                session["fullname"], session["email"], session["password"])
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("user"))
     if request.method == "GET":
         return render_template("signup.html")
 
@@ -85,6 +90,7 @@ def signout():
     session.pop("fullname", None)
     session.pop("email", None)
     session.pop("password", None)
+    session.permanent = False
     flash("You have been logout.", "info")
     return redirect(url_for("home"))
 
