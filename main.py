@@ -41,7 +41,7 @@ def signup():
             email=session["email"]).scalar() is not None
 
         if exists:
-            flash("Esse e-mail já está sendo utilizado.")
+            flash("This email address is already in use.")
             return redirect(url_for("signup"))
         else:
             session.permanent = True
@@ -51,12 +51,16 @@ def signup():
             db.session.commit()
             return redirect(url_for("user"))
     if request.method == "GET":
+        if session.permanent is True:
+            return redirect(url_for("user"))
         return render_template("signup.html")
 
 
 @app.route('/user/')
 def user():
-    return render_template("user.html")
+    if session.permanent is True:
+        return render_template("user.html")
+    return redirect(url_for("home"))
 
 
 @app.route('/changeemail/', methods=["GET", "POST"])
@@ -69,7 +73,7 @@ def changeemail():
         if "fullname" in session:
             return render_template("changeemail.html")
         else:
-            return render_template("home.html")
+            return redirect(url_for("home"))
 
 
 @app.route('/changepassword/', methods=["GET", "POST"])
@@ -82,7 +86,28 @@ def changepassword():
         if "fullname" in session:
             return render_template("changepassword.html")
         else:
-            return render_template("home.html")
+            return redirect(url_for("home"))
+
+
+@app.route('/confirmAdmin/', methods=["GET", "POST"])
+def confirmAdmin():
+    if request.method == "POST":
+        if request.form["password"] == 'senha':
+            return redirect(url_for("view"))
+        else:
+            flash("Wrong Password!")
+            return render_template("confirm-admin.html")
+    else:
+        if session.permanent is True:
+            return render_template("confirm-admin.html")
+        return redirect(url_for("home"))
+
+
+@app.route('/view/')
+def view():
+    if session.permanent is True:
+        return render_template("view.html", values=users.query.all())
+    return redirect(url_for("home"))
 
 
 @app.route('/signout/')
@@ -93,11 +118,6 @@ def signout():
     session.permanent = False
     flash("You have been logout.", "info")
     return redirect(url_for("home"))
-
-
-@app.route('/view/')
-def view():
-    return render_template("view.html", values=users.query.all())
 
 
 if __name__ == "__main__":
