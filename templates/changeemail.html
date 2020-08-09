@@ -2,6 +2,17 @@
 {% block title %}Change Email{% endblock %}
 
 {% block content %}
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info" role="alert">
+            {% for msg in messages %}
+                {{ msg }}
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <h1>Change E-mail</h1>
 
     <form method="POST" style="margin-top: 30px;">

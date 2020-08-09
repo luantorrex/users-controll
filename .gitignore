@@ -1,3 +1,2 @@
 /.vscode
-
-users.sqlite3
+/.__pycache__/

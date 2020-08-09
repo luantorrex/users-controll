@@ -31,14 +31,19 @@ def home():
     return render_template("home.html")
 
 
+def isEmailInUse(emailToValidate):
+    exists = db.session.query(users._id).filter_by(
+        email=emailToValidate).scalar() is not None
+    return exists
+
+
 @app.route('/signup/', methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
         session["fullname"] = request.form["fullname"]
         session["email"] = request.form["email"]
         session["password"] = request.form["password"]
-        exists = db.session.query(users._id).filter_by(
-            email=session["email"]).scalar() is not None
+        exists = isEmailInUse(request.form["email"])
 
         if exists:
             flash("This email address is already in use.")
@@ -64,11 +69,16 @@ def user():
 
 
 @app.route('/changeemail/', methods=["GET", "POST"])
-def changeemail():
+def changeEmail():
     if request.method == "POST":
-        session["email"] = request.form["email"]
-        flash("You have successfully changed your email.", "info")
-        return redirect(url_for("user"))
+        emailFromInput = request.form["email"]
+        if isEmailInUse(emailFromInput):
+            flash("This email is already in use")
+            return redirect(url_for("changeEmail"))
+        else:
+            session["email"] = emailFromInput
+            flash("You have successfully changed your email.", "info")
+            return redirect(url_for("user"))
     else:
         if "fullname" in session:
             return render_template("changeemail.html")
@@ -77,7 +87,7 @@ def changeemail():
 
 
 @app.route('/changepassword/', methods=["GET", "POST"])
-def changepassword():
+def changePassword():
     if request.method == "POST":
         session["password"] = request.form["password"]
         flash("You have successfully changed your password.", "info")
@@ -92,8 +102,8 @@ def changepassword():
 @app.route('/confirmAdmin/', methods=["GET", "POST"])
 def confirmAdmin():
     if request.method == "POST":
-        if request.form["password"] == 'senha':
-            return redirect(url_for("view"))
+        if request.form["password"] == 'pass123':
+            return redirect(url_for("view", password='pass123'))
         else:
             flash("Wrong Password!")
             return render_template("confirm-admin.html")
@@ -103,20 +113,23 @@ def confirmAdmin():
         return redirect(url_for("home"))
 
 
-@app.route('/view/')
-def view():
-    if session.permanent is True:
+@app.route('/view/<password>/')
+def view(password):
+    if password == 'pass123' and session.permanent is True:
         return render_template("view.html", values=users.query.all())
     return redirect(url_for("home"))
 
 
 @app.route('/signout/')
 def signout():
-    session.pop("fullname", None)
-    session.pop("email", None)
-    session.pop("password", None)
-    session.permanent = False
-    flash("You have been logout.", "info")
+    if session.permanent is True:
+        session.pop("fullname", None)
+        session.pop("email", None)
+        session.pop("password", None)
+        session.permanent = False
+        flash("You have been logout.", "info")
+    else:
+        flash("You was not logged in")
     return redirect(url_for("home"))
 
 
