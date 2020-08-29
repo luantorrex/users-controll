@@ -1,11 +1,14 @@
 from app import app
-from app.forms import RegistrationForm
+from app.forms import RegistrationForm, LoginForm
 from flask import render_template, url_for, redirect, flash
 
 
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
 def home():
-    return render_template("home.html")
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash("Válido!")
+    return render_template("home.html", form=form)
 
 
 @app.route('/signup/', methods=["GET", "POST"])

@@ -1,34 +1,40 @@
 {% extends "base.html" %}
 {% block title %}Home Page{% endblock %}
 
+{% block innertitle %}Welcome to Users Controll{% endblock %}
+
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msgs in messages %}
-                <div class="alert alert-info" role="alert">
-                    {{msgs}}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
 
-    <h1 style="margin-bottom: 30px;">Welcome to Users Controll</h1>
+    <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
 
-    <label for="email">E-mail:</label>
-    <input type="email" id="email" class="form-control" placeholder="your@email.com">
-    <p id="passwordHelpBlock" class="form-text text-muted">
-    </p>
+        <p>
+        <h3>{{ form.username.label }}</h3>
+        {{ form.username(class_="form-control", placeholder="your_username") }}
+        {% for error in form.username.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+        </p>
 
-    <label for="inputPassword5">Password:</label>
-    <input type="password" id="inputPassword5" class="form-control" placeholder="*****************">
-    <p id="passwordHelpBlock" class="form-text text-muted">
-    </p>
+        <p>
+        <h3>{{ form.password.label }}</h3>
+        {{ form.password(class_="form-control", placeholder="**********") }}
+        {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+        </p>
 
-    <button type="button" class="btn btn-primary btn-lg btn-block" style="margin-top: 40px;">Login</button>
+        <p>
+            <span style="font-size: 1.4em">{{ form.remember_me.label }}</span>
+            {{ form.remember_me }}
+        </p>
+
+        {{ form.submit(class_="btn-block btn-primary btn-lg") }}
+    </form>
 
     <center>
         <div>
-            <h5 style="padding-top: 30px;">Doen't have an account yet?</h5>
+            <h5 style="padding-top: 30px;">Doesn't have an account yet?</h5>
             <a href="{{ url_for("signup") }}">Sign Up</a>
         </div>
     </center>

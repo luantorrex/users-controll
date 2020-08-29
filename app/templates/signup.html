@@ -2,28 +2,17 @@
 
 {% block title %}SignUp Page{% endblock %}
 
+{% block innertitle %}Sign Up{% endblock %}
 
 {% block content %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msgs in messages %}
-                <div class="alert alert-info" role="alert">
-                    {{msgs}}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
-    <h1>Sign Up</h1>
-
-<form method="POST" style="margin-top: 20px;" novalidate>
+<form method="POST" novalidate>
 
     {{ form.hidden_tag() }}
 
     <p>
     <h3>{{ form.username.label }}</h3>
-    {{ form.username(class_="form-control", placeholder="E.g.: John Smith") }}
+    {{ form.username(class_="form-control", placeholder="E.g.: john_smith") }}
     {% for error in form.username.errors %}
         <span style="color: red;">{{ error }}</span>
     {% endfor %}
@@ -32,7 +21,7 @@
     <p>
     <h3>{{ form.email.label }}</h3>
     {{ form.email(class_="form-control", placeholder="E.g.: john@smith.com") }}
-    {% for error in form.username.errors %}
+    {% for error in form.email.errors %}
         <span style="color: red;">{{ error }}</span>
     {% endfor %}
     </p>
