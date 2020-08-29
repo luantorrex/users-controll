@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}SignUp Page{% endblock %}
+
+
+{% block content %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msgs in messages %}
+                <div class="alert alert-info" role="alert">
+                    {{msgs}}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h1>Sign Up</h1>
+
+<form method="POST" style="margin-top: 20px;" novalidate>
+
+    {{ form.hidden_tag() }}
+
+    <p>
+    <h3>{{ form.username.label }}</h3>
+    {{ form.username(class_="form-control", placeholder="E.g.: John Smith") }}
+    {% for error in form.username.errors %}
+        <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+    </p>
+    
+    <p>
+    <h3>{{ form.email.label }}</h3>
+    {{ form.email(class_="form-control", placeholder="E.g.: john@smith.com") }}
+    {% for error in form.username.errors %}
+        <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+    </p>
+
+    <p>
+    <h3>{{ form.password.label }}</h3>
+    {{ form.password(class_="form-control", placeholder="**********") }}
+    {% for error in form.password.errors %}
+        <span style="color: red;">{{ error }}</span>
+    {% endfor %}
+    </p>
+
+    <div style="margin-top: 30px;">
+        {{ form.submit(class_="btn-block btn-primary btn-lg") }}
+    </div>
+</form>
+
+{% endblock %}
