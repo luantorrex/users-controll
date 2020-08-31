@@ -1,22 +1,41 @@
 {% extends "base-logged.html" %}
 {% block title %}Database{% endblock %}
 
+{% block innertitle %}Users Controll{% endblock %}
+
 {% block content %}
     <table class="table">
         <thead class="thead-light">
             <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Username</th>
-            <th scope="col">E-mail</th>
+            <th scope="col"><center>ID</center></th>
+            <th scope="col"><center>Username</center></th>
+            <th scope="col"><center>E-mail</center></th>
+            <th scope="col"><center>Admin</center></th>
+            <th scope="col"><center>Delete</center></th>
             </tr>
         </thead>
     
         <tbody>
         {% for user in users %}
             <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email }}</td>
+                <td><center>{{ user.id }}</center></td>
+                <td><center>{{ user.username }}</center></td>
+                <td><center>{{ user.email }}</center></td>
+                <td><center>
+                    {% if user.admin == True: %}
+                        <a href="{{ url_for('changePermission', user=user) }}"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bookmark-check-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M4 0a2 2 0 0 0-2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4zm6.854 5.854a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                        </svg></a>
+                    {% else: %}
+                        <a href="{{ url_for('changePermission', user=user) }}"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bookmark-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                            <path fill-rule="evenodd" d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                        </svg></a>
+                    {% endif %}
+                </center></td>
+                <td><center><a href="{{ url_for('deleteUser', user=user) }}"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                </svg></a></center></td>
             </tr>
         {% endfor %}
         </tbody>    
