@@ -18,12 +18,18 @@ class LoginForm(FlaskForm):
 
 
 class ChangeEmail(FlaskForm):
-    email = StringField('Enter a new e-mail: ',
+    email = StringField('Enter a new e-mail:',
                         validators=[DataRequired(), Email()])
     submit = SubmitField("Change Email")
 
 
 class ChangePassword(FlaskForm):
-    password = PasswordField('Enter a new password',
+    password = PasswordField('Enter a new password:',
                              validators=[DataRequired()])
     submit = SubmitField("Change Password")
+
+
+class AdminCheck(FlaskForm):
+    password = PasswordField("Enter the administrator password:",
+                             validators=[DataRequired()])
+    submit = SubmitField("Send Password")

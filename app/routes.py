@@ -1,5 +1,6 @@
 from app import app, db
 from app.forms import ChangeEmail, ChangePassword, RegistrationForm, LoginForm
+from app.forms import AdminCheck
 from app.models import User
 from flask import render_template, url_for, redirect, flash
 from flask_login import login_required, login_user, logout_user
@@ -80,13 +81,23 @@ def changePassword():
 
 @app.route('/confirmAdmin/', methods=["GET", "POST"])
 def confirmAdmin():
-    return render_template("confirm-admin.html")
+    form = AdminCheck()
+    if form.validate_on_submit():
+        if form.password.data == "pass123":
+            current_user.admin = True
+            db.session.add(current_user)
+            db.session.commit()
+            return redirect(url_for("dbView"))
+    return render_template("confirm-admin.html", form=form)
 
 
-@app.route('/view/')
+@app.route('/dbView/')
 @login_required
-def view():
-    return render_template("view.html", users=User.query.all())
+def dbView():
+    if current_user.admin is True:
+        return render_template("view.html", users=User.query.all())
+    else:
+        return redirect(url_for("confirmAdmin"))
 
 
 @app.route('/signout/')
