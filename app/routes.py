@@ -1,6 +1,8 @@
 from app import app, db
 from app.forms import RegistrationForm, LoginForm
 from flask import render_template, url_for, redirect, flash
+from flask_login import login_required, login_user, logout_user
+from flask_login import current_user
 from app.models import User
 
 
@@ -8,7 +10,14 @@ from app.models import User
 def home():
     form = LoginForm()
     if form.validate_on_submit():
-        flash("Válido!")
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is not None and user.password == form.password.data:
+            login_user(user, remember=form.remember_me.data)
+            return redirect(url_for("user"))
+        else:
+            flash("Usuário ou senha incorretos!")
+    if current_user.is_authenticated:
+        return render_template("user.html")
     return render_template("home.html", form=form)
 
 
@@ -33,8 +42,9 @@ def signup():
 
 
 @app.route('/user/')
+@login_required
 def user():
-    return redirect(url_for("home"))
+    return render_template("user.html")
 
 
 @app.route('/changeemail/', methods=["GET", "POST"])
@@ -44,7 +54,7 @@ def changeEmail():
 
 @app.route('/changepassword/', methods=["GET", "POST"])
 def changePassword():
-    return redirect(url_for("home"))
+    return render_template("changepassword.html")
 
 
 @app.route('/confirmAdmin/', methods=["GET", "POST"])
@@ -63,4 +73,5 @@ def view(password):
 
 @app.route('/signout/')
 def signout():
+    logout_user()
     return redirect(url_for("home"))

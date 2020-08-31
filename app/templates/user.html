@@ -2,9 +2,9 @@
 {% block title %}User Page{% endblock %}
 
 {% block content %}
-    <h1 style="margin-bottom: 30px;">{{ session["fullname"] }}</h1>
+    <h1 style="margin-bottom: 30px;">Hello, {{ current_user.username }}!</h1>
 
-    <h5>E-mail: {{ session["email"] }}</h5>
+    <h5>E-mail: {{ current_user.email }}</h5>
     <a href="{{ url_for("changeEmail") }}">Change E-mail</a>
 
     <h5 style="margin-top: 15px;">Password: ************</h5>
