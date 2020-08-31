@@ -1,0 +1,25 @@
+{% extends "base-logged.html" %}
+{% block title %}Change Email{% endblock %}
+
+{% block content %}
+
+    <h1>Administrator Check</h1>
+
+    <form method="POST" style="margin-top: 30px;" novalidate>
+
+        {{ form.hidden_tag() }}
+
+        <p>
+            <h3>{{  form.password.label  }}</h3>
+            {{ form.password(class_="form-control", placeholder="************") }}
+
+            {% for error in form.password.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p style="margin-top: 30px;">{{ form.submit(class_="btn-block btn-primary btn-lg") }}</p>
+
+    </form>
+
+{% endblock %}

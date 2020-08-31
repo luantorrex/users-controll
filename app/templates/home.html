@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+
+{% block innertitle %}Welcome to Users Controll{% endblock %}
+
+{% block content %}
+
+    <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+
+        <p>
+        <h3>{{ form.username.label }}</h3>
+        {{ form.username(class_="form-control", placeholder="your_username") }}
+        {% for error in form.username.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+        </p>
+
+        <p>
+        <h3>{{ form.password.label }}</h3>
+        {{ form.password(class_="form-control", placeholder="**********") }}
+        {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+        </p>
+
+        <p>
+            <span style="font-size: 1.4em">{{ form.remember_me.label }}</span>
+            {{ form.remember_me }}
+        </p>
+
+        {{ form.submit(class_="btn-block btn-primary btn-lg") }}
+    </form>
+
+    <center>
+        <div>
+            <h5 style="padding-top: 30px;">Doesn't have an account yet?</h5>
+            <a href="{{ url_for("signup") }}">Sign Up</a>
+        </div>
+    </center>
+{% endblock %}
