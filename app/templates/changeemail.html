@@ -5,12 +5,21 @@
 
     <h1>Change E-mail</h1>
 
-    <form method="POST" style="margin-top: 30px;">
+    <form method="POST" style="margin-top: 30px;" novalidate>
 
-        <label for="email">Enter your new e-mail</label>
-        <input name="email" id="email" type="email" class="form-control" placeholder="your@email.com" required>
-           
-        <button type="submit" value="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 40px;">Confirm</button>
+        {{ form.hidden_tag() }}
+
+        <p>
+            <h3>{{  form.email.label  }}</h3>
+            {{ form.email(class_="form-control", placeholder="email@example.com") }}
+
+            {% for error in form.email.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p style="margin-top: 30px;">{{ form.submit(class_="btn-block btn-primary btn-lg") }}</p>
+
     </form>
 
 {% endblock %}

@@ -1,9 +1,9 @@
 from app import app, db
-from app.forms import RegistrationForm, LoginForm
+from app.forms import ChangeEmail, ChangePassword, RegistrationForm, LoginForm
+from app.models import User
 from flask import render_template, url_for, redirect, flash
 from flask_login import login_required, login_user, logout_user
 from flask_login import current_user
-from app.models import User
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -33,7 +33,9 @@ def signup():
                         password=form.password.data)
             db.session.add(user)
             db.session.commit()
-            flash("Validado e cadastrado!")
+            login_user(user)
+            flash("Congratulations! You just created your account")
+            return redirect(url_for("user"))
         if username is not None:
             flash("Username already in use. Please choose another one.")
         if email is not None:
@@ -48,13 +50,32 @@ def user():
 
 
 @app.route('/changeemail/', methods=["GET", "POST"])
+@login_required
 def changeEmail():
-    return render_template("changeemail.html")
+    form = ChangeEmail()
+    newEmail = User.query.filter_by(email=form.email.data).first()
+    if form.validate_on_submit() and newEmail is None:
+        current_user.email = form.email.data
+        db.session.add(current_user)
+        db.session.commit()
+        flash("E-mail changed with success.")
+        return redirect(url_for("user"))
+    if newEmail is not None:
+        flash("E-mail already in use. Please choose another one")
+    return render_template("changeemail.html", form=form)
 
 
 @app.route('/changepassword/', methods=["GET", "POST"])
+@login_required
 def changePassword():
-    return render_template("changepassword.html")
+    form = ChangePassword()
+    if form.validate_on_submit():
+        current_user.password = form.password.data
+        db.session.add(current_user)
+        db.session.commit()
+        flash("Password changed with success.")
+        return redirect(url_for("user"))
+    return render_template("changepassword.html", form=form)
 
 
 @app.route('/confirmAdmin/', methods=["GET", "POST"])
