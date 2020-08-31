@@ -1,6 +1,7 @@
-from app import app
+from app import app, db
 from app.forms import RegistrationForm, LoginForm
 from flask import render_template, url_for, redirect, flash
+from app.models import User
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -15,7 +16,19 @@ def home():
 def signup():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash("Validado!")
+        username = User.query.filter_by(username=form.username.data).first()
+        email = User.query.filter_by(email=form.email.data).first()
+        if username is None and email is None:
+            user = User(username=form.username.data,
+                        email=form.email.data,
+                        password=form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash("Validado e cadastrado!")
+        if username is not None:
+            flash("Username already in use. Please choose another one.")
+        if email is not None:
+            flash("Email already in use. Please choose another one.")
     return render_template("signup.html", form=form)
 
 
