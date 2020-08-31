@@ -1,22 +1,22 @@
 {% extends "base-logged.html" %}
-{% block title %}Banco de Dados{% endblock %}
+{% block title %}Database{% endblock %}
 
 {% block content %}
     <table class="table">
         <thead class="thead-light">
             <tr>
-            <th scope="col">Name</th>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
             <th scope="col">E-mail</th>
-            <th scope="col">Password</th>
             </tr>
         </thead>
     
         <tbody>
-        {% for item in values %}
+        {% for user in users %}
             <tr>
-                <td>{{ item.name }}</td>
-                <td>{{ item.email }}</td>
-                <td>{{ item.password }}</td>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
             </tr>
         {% endfor %}
         </tbody>    

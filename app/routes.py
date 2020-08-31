@@ -83,13 +83,10 @@ def confirmAdmin():
     return render_template("confirm-admin.html")
 
 
-"""
-@app.route('/view/<password>/')
-def view(password):
-    if password == 'pass123' and session.permanent is True:
-        return render_template("view.html", values=users.query.all())
-    return redirect(url_for("home"))
-"""
+@app.route('/view/')
+@login_required
+def view():
+    return render_template("view.html", users=User.query.all())
 
 
 @app.route('/signout/')
