@@ -100,6 +100,31 @@ def dbView():
         return redirect(url_for("confirmAdmin"))
 
 
+@app.route('/changePermission/<user>', methods=["GET", "POST"])
+@login_required
+def changePermission(user):
+    user = user.split()[-1].replace("'>", "").replace("'", "")
+    user = User.query.filter_by(username=user).first()
+    if user.admin is True:
+        user.admin = False
+    else:
+        user.admin = True
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for("dbView"))
+
+
+@app.route('/deleteUser/<user>', methods=["POST", "GET"])
+@login_required
+def deleteUser(user):
+    user = user.split()[-1].replace("'>", "").replace("'", "")
+    user = User.query.filter_by(username=user).first()
+    flash(user.username + " deleted with success.")
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for("dbView"))
+
+
 @app.route('/signout/')
 def signout():
     logout_user()
