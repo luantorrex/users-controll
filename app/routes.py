@@ -88,6 +88,8 @@ def confirmAdmin():
             db.session.add(current_user)
             db.session.commit()
             return redirect(url_for("dbView"))
+        else:
+            flash("Wrong password. Try Again")
     return render_template("confirm-admin.html", form=form)
 
 
@@ -107,8 +109,10 @@ def changePermission(user):
     user = User.query.filter_by(username=user).first()
     if user.admin is True:
         user.admin = False
+        flash(user.username + " isn't an administrator anymore.")
     else:
         user.admin = True
+        flash(user.username + " is an administrator now.")
     db.session.add(user)
     db.session.commit()
     return redirect(url_for("dbView"))
