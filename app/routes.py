@@ -114,12 +114,28 @@ def changePermission(user):
     return redirect(url_for("dbView"))
 
 
-@app.route('/deleteUser/<user>', methods=["POST", "GET"])
+@app.route('/resetPassword/<user>', methods=["GET", "POST"])
+@login_required
+def resetPassword(user):
+    user = user.split()[-1].replace("'>", "").replace("'", "")
+    user = User.query.filter_by(username=user).first()
+    user.password = 'abc123'
+    flash("The " + user.username + "'s password has been reset.")
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for("dbView"))
+
+
+@app.route('/deleteUser/<user>', methods=["GET", "POST"])
 @login_required
 def deleteUser(user):
     user = user.split()[-1].replace("'>", "").replace("'", "")
     user = User.query.filter_by(username=user).first()
-    flash(user.username + " deleted with success.")
+    print(user.username, current_user.username)
+    if user.username is current_user.username:
+        flash("You can't delete your own account.")
+        return redirect(url_for("dbView"))
+    flash("The user " + user.username + " has been deleted.")
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for("dbView"))
