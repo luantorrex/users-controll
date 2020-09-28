@@ -12,7 +12,7 @@ def home():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user is not None and user.password == form.password.data:
+        if user is not None and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for("user"))
         else:
@@ -30,8 +30,8 @@ def signup():
         email = User.query.filter_by(email=form.email.data).first()
         if username is None and email is None:
             user = User(username=form.username.data,
-                        email=form.email.data,
-                        password=form.password.data)
+                        email=form.email.data)
+            user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
             login_user(user)
@@ -71,7 +71,7 @@ def changeEmail():
 def changePassword():
     form = ChangePassword()
     if form.validate_on_submit():
-        current_user.password = form.password.data
+        current_user.set_password(form.password.data)
         db.session.add(current_user)
         db.session.commit()
         flash("Password changed with success.")
