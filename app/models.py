@@ -10,6 +10,11 @@ class User(db.Model, UserMixin):
     admin = db.Column(db.Boolean)
     password = db.Column(db.String(128))
 
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
+        self.admin = False
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
