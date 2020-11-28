@@ -5,6 +5,7 @@ Essa aplicação foi desenvolvida com base nos artigos do blog [Miguel Grinberg]
 
 ## Rodar Aplicação Localmente
 ```pip install requirements.txt```
+
 ```flask run```
 
 ## Link da Aplicação no Heroku
